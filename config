@@ -1,0 +1,5 @@
+# SSH over Session Manager
+host i-* mi-*
+	ProxyCommand sh -c "aws ssm start-session --target %h --document-name AWS-StartSSHSession --parameters 'portNumber=%p'"
+	IdentityFile /home/tony/.ssh/key.pem
+	User ec2-user
