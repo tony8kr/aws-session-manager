@@ -1,0 +1,35 @@
+# To start a session using the AWS CLI
+aws ssm start-session --target instance-id
+
+# To start a Session Manager SSH session
+ssh -i /path/my-key-pair.pem username@instance-id
+
+# When using IdentityFile and User in ssh config file
+ssh instance-id
+
+# When you start a session using SSH, you can copy local files to the target managed node
+scp -i /path/my-key-pair.pem /path/ExampleFile.txt username@instance-id:~
+
+# To start a Session Manager port forwarding session
+aws ssm start-session \
+    --target instance-id \
+    --document-name AWS-StartPortForwardingSession \
+    --parameters '{"portNumber":["80"], "localPortNumber":["56789"]}'
+
+# To start a Session Manager port forwarding session to a remote host
+aws ssm start-session \
+    --target instance-id \
+    --document-name AWS-StartPortForwardingSessionToRemoteHost \
+    --parameters '{"host":["mydb.example.us-east-2.rds.amazonaws.com"],"portNumber":["3306"], "localPortNumber":["3306"]}'
+
+# To start a port forwarding session with an Amazon ECS task
+aws ssm start-session \
+    --target ecs:<ECS_cluster_name>_<ECS_container_ID>_<container_runtime_ID> \
+    --document-name AWS-StartPortForwardingSessionToRemoteHost \
+    --parameters '{"host":["URL"],"portNumber":["port_number"], "localPortNumber":["port_number"]}'
+
+# To start an interactive command session
+aws ssm start-session \
+    --target instance-id \
+    --document-name CustomCommandSessionDocument \
+    --parameters '{"logpath":["/var/log/amazon/ssm/amazon-ssm-agent.log"]}'
